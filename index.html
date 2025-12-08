@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>VADIK :: overexposed / underdefined</title>
+  <title>eristes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Fonts -->
@@ -16,13 +16,9 @@
     :root {
       --bg-0: #05010a;
       --bg-1: #0b0329;
-      --bg-2: #e11d48;
-      --bg-3: #22d3ee;
       --fg-main: #f9fafb;
-      --fg-soft: #cbd5f5;
+      --fg-soft: #e5e7f7;
       --fg-muted: #9ca3af;
-      --accent-1: #f97316;
-      --accent-2: #8b5cf6;
     }
 
     * {
@@ -39,14 +35,28 @@
     body {
       font-family: "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:
-        radial-gradient(circle at 10% 10%, rgba(248, 113, 113, 0.34), transparent 55%),
-        radial-gradient(circle at 80% 90%, rgba(56, 189, 248, 0.46), transparent 55%),
-        radial-gradient(circle at 0% 90%, rgba(94, 234, 212, 0.4), transparent 55%),
+        radial-gradient(circle at 10% 10%, rgba(248, 113, 113, 0.32), transparent 55%),
+        radial-gradient(circle at 80% 90%, rgba(56, 189, 248, 0.42), transparent 55%),
+        radial-gradient(circle at 0% 90%, rgba(94, 234, 212, 0.35), transparent 55%),
         linear-gradient(135deg, var(--bg-0), var(--bg-1));
+      background-size: 200% 200%;
+      animation: bgShift 140s ease-in-out infinite alternate;
       color: var(--fg-main);
       overflow: hidden;
       position: relative;
       isolation: isolate;
+    }
+
+    @keyframes bgShift {
+      0% {
+        background-position: 0% 0%;
+      }
+      50% {
+        background-position: 100% 60%;
+      }
+      100% {
+        background-position: 0% 100%;
+      }
     }
 
     /* noisy overlay */
@@ -55,7 +65,7 @@
       inset: -10px;
       pointer-events: none;
       mix-blend-mode: soft-light;
-      opacity: 0.35;
+      opacity: 0.32;
       z-index: -1;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.9'/%3E%3C/svg%3E");
     }
@@ -66,7 +76,7 @@
       width: 520px;
       height: 520px;
       border-radius: 50%;
-      border: 1px solid rgba(248, 250, 252, 0.18);
+      border: 1px solid rgba(248, 250, 252, 0.16);
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
@@ -82,14 +92,14 @@
       background:
         conic-gradient(from 180deg,
           rgba(244, 114, 182, 0.0) 0deg,
-          rgba(244, 114, 182, 0.9) 90deg,
-          rgba(59, 130, 246, 0.0) 160deg,
-          rgba(34, 211, 238, 0.9) 230deg,
-          rgba(244, 114, 182, 0.0) 310deg,
-          rgba(59, 130, 246, 0.8) 360deg
+          rgba(244, 114, 182, 0.85) 90deg,
+          rgba(59, 130, 246, 0.0) 150deg,
+          rgba(34, 211, 238, 0.85) 230deg,
+          rgba(244, 114, 182, 0.0) 300deg,
+          rgba(59, 130, 246, 0.75) 360deg
         );
-      animation: spin 32s linear infinite;
-      opacity: 0.75;
+      animation: spin 90s linear infinite;
+      opacity: 0.8;
     }
 
     @keyframes spin {
@@ -98,11 +108,28 @@
       }
     }
 
+    /* foggy single "vadik" */
+    .fog-name {
+      position: fixed;
+      bottom: 8%;
+      right: 6%;
+      font-family: "DM Serif Display", "Times New Roman", serif;
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      text-transform: lowercase;
+      letter-spacing: 0.6em;
+      color: #f9fafb;
+      opacity: 0.06;
+      filter: blur(2.4px);
+      mix-blend-mode: soft-light;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
     /* layout */
     .shell {
       position: relative;
       display: grid;
-      grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.4fr);
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.5fr);
       gap: 3rem;
       padding: 2.25rem 3rem 2.5rem;
       height: 100vh;
@@ -163,88 +190,32 @@
       box-shadow: 0 0 9px rgba(34, 197, 94, 0.9);
     }
 
-    /* main wordmark */
-    .brand {
-      margin-top: 2.2rem;
-      position: relative;
-    }
-
-    .brand-name {
-      font-family: "DM Serif Display", "Times New Roman", serif;
-      font-size: clamp(3rem, 6vw, 4.4rem);
-      letter-spacing: 0.24em;
-      text-transform: uppercase;
-      line-height: 0.9;
-      position: relative;
-      display: inline-block;
-    }
-
-    .brand-name::before {
-      content: "VADIK";
-      position: absolute;
-      inset: 0;
-      transform: translate(-3px, 4px);
-      color: transparent;
-      -webkit-text-stroke: 1px rgba(244, 114, 182, 0.9);
-      text-stroke: 1px rgba(244, 114, 182, 0.9);
-      opacity: 0.7;
-      mix-blend-mode: screen;
-    }
-
-    .brand-name span {
-      background: linear-gradient(110deg, #f9fafb, #f472b6, #22d3ee);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      text-shadow:
-        0 0 28px rgba(15, 23, 42, 0.9),
-        0 0 60px rgba(244, 114, 182, 0.85);
-    }
-
-    .brand-caption {
-      margin-top: 0.8rem;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.76rem;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      color: var(--fg-muted);
-      max-width: 16rem;
-    }
-
-    /* poetic block */
-    .poem {
+    /* minimal left content */
+    .left-main {
       margin-top: 2.4rem;
-      font-size: 0.98rem;
-      max-width: 30rem;
-      line-height: 1.7;
+    }
+
+    .left-title {
+      font-family: "DM Serif Display", serif;
+      font-size: clamp(2.1rem, 4vw, 3rem);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .left-sub {
+      margin-top: 0.8rem;
+      font-size: 0.9rem;
+      max-width: 22rem;
+      line-height: 1.6;
       color: var(--fg-soft);
     }
 
-    .poem span.accent {
-      color: #f472b6;
+    .left-sub span {
+      opacity: 0.8;
     }
 
-    .labels-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 1.4rem;
-    }
-
-    .label {
-      border-radius: 999px;
-      padding: 0.26rem 0.75rem;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: rgba(15, 23, 42, 0.7);
-      font-size: 0.76rem;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: var(--fg-muted);
-    }
-
-    /* bottom left: small nav */
     .nav-row {
-      margin-top: 2.6rem;
+      margin-top: 3rem;
       display: flex;
       flex-wrap: wrap;
       gap: 1.3rem;
@@ -282,16 +253,16 @@
       margin-right: 0.4rem;
     }
 
-    /* right side: collage + “terminal” + audio */
+    /* right side block */
     .block {
       border-radius: 24px;
       border: 1px solid rgba(148, 163, 184, 0.5);
       background:
-        linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.65));
+        linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.7));
       box-shadow:
         0 0 0 1px rgba(15, 23, 42, 1),
         0 30px 80px rgba(15, 23, 42, 0.9);
-      padding: 1.3rem 1.3rem 1.15rem;
+      padding: 1.5rem 1.6rem 1.4rem;
       position: relative;
       overflow: hidden;
     }
@@ -301,8 +272,8 @@
       position: absolute;
       inset: -60%;
       background:
-        radial-gradient(circle at 20% 20%, rgba(248, 113, 113, 0.15), transparent 65%),
-        radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.2), transparent 70%);
+        radial-gradient(circle at 20% 20%, rgba(248, 113, 113, 0.18), transparent 65%),
+        radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.18), transparent 70%);
       opacity: 0.9;
       mix-blend-mode: soft-light;
       pointer-events: none;
@@ -311,6 +282,11 @@
     .block-inner {
       position: relative;
       z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.5rem;
     }
 
     .block-header {
@@ -322,7 +298,7 @@
       text-transform: uppercase;
       letter-spacing: 0.16em;
       color: var(--fg-muted);
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.3rem;
     }
 
     .block-dots {
@@ -343,9 +319,8 @@
 
     .canvas {
       display: grid;
-      grid-template-columns: 3fr 2fr;
-      gap: 0.6rem;
-      margin-top: 0.4rem;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.2fr);
+      gap: 0.9rem;
       align-items: stretch;
     }
 
@@ -357,28 +332,27 @@
 
     .poster {
       border-radius: 18px;
-      border: 1px solid rgba(248, 250, 252, 0.1);
+      border: 1px solid rgba(248, 250, 252, 0.09);
       background:
-        linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.7)),
-        conic-gradient(from 210deg, rgba(248, 250, 252, 0.3), transparent, rgba(244, 114, 182, 0.5), transparent);
-      padding: 1.1rem 1rem 0.9rem;
+        linear-gradient(145deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.8));
+      padding: 1rem 1rem 0.9rem;
       position: relative;
       overflow: hidden;
     }
 
     .poster-tag {
       font-family: "JetBrains Mono", monospace;
-      font-size: 0.65rem;
+      font-size: 0.64rem;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--fg-muted);
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.9rem;
     }
 
     .poster-main {
       font-family: "DM Serif Display", serif;
-      font-size: 1.6rem;
-      line-height: 1.1;
+      font-size: 1.5rem;
+      line-height: 1.2;
       max-width: 11rem;
     }
 
@@ -387,6 +361,13 @@
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
+    }
+
+    .poster-caption {
+      margin-top: 1rem;
+      font-size: 0.76rem;
+      color: rgba(209, 213, 219, 0.92);
+      max-width: 14rem;
     }
 
     .poster-scribble {
@@ -405,91 +386,73 @@
       transform: rotate(-10deg);
     }
 
-    .poster-caption {
-      margin-top: 1.1rem;
-      font-size: 0.76rem;
-      color: rgba(209, 213, 219, 0.9);
-      max-width: 14rem;
-    }
-
     .side-meta {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.74rem;
+      color: var(--fg-soft);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 0.8rem;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.75rem;
-      color: var(--fg-soft);
-    }
-
-    .meta-line {
-      display: flex;
-      justify-content: space-between;
-      gap: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-    }
-
-    .meta-label {
-      opacity: 0.6;
-    }
-
-    .meta-value {
-      opacity: 0.95;
+      gap: 0.9rem;
     }
 
     .meta-small {
-      margin-top: 0.5rem;
       font-size: 0.7rem;
       color: var(--fg-muted);
       letter-spacing: 0.12em;
       text-transform: uppercase;
+      line-height: 1.6;
     }
 
-    /* audio controls */
+    /* audio controls – central focus */
     .audio-strip {
-      margin-top: 1.1rem;
+      margin-top: 0.8rem;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      gap: 0.9rem;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.74rem;
-      color: var(--fg-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
+      gap: 0.75rem;
+      text-align: center;
     }
 
     .audio-button {
       border-radius: 999px;
-      border: 1px solid rgba(248, 250, 252, 0.6);
-      padding: 0.42rem 1.1rem;
-      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(248, 250, 252, 0.85);
+      padding: 0.85rem 2.6rem;
+      background: rgba(15, 23, 42, 0.96);
       color: var(--fg-main);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      transition: transform 0.09s ease-out, box-shadow 0.09s ease-out, background 0.2s ease;
+      gap: 0.6rem;
+      transition: transform 0.1s ease-out, box-shadow 0.12s ease-out, background 0.2s ease;
       box-shadow: 0 0 0 rgba(248, 250, 252, 0);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
     }
 
     .audio-button:hover {
       transform: translateY(-1px);
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
-      background: linear-gradient(120deg, rgba(248, 250, 252, 0.9), rgba(248, 250, 252, 0.8));
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.95);
+      background: linear-gradient(120deg, rgba(248, 250, 252, 0.96), rgba(248, 250, 252, 0.9));
       color: #020617;
     }
 
-    .audio-status {
-      opacity: 0.8;
-    }
-
     .audio-icon {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
     }
 
-    /* bottom right: footer text */
+    .audio-status {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      color: var(--fg-muted);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    /* footer */
     .footer {
       font-family: "JetBrains Mono", monospace;
       font-size: 0.7rem;
@@ -499,7 +462,7 @@
       display: flex;
       justify-content: space-between;
       gap: 0.8rem;
-      margin-top: 0.6rem;
+      margin-top: 0.7rem;
     }
 
     .footer span:nth-child(2) {
@@ -522,10 +485,10 @@
 <body>
   <div class="noise"></div>
   <div class="halo"></div>
+  <div class="fog-name">vadik</div>
 
   <!-- Hidden audio-only YouTube player
-       Replace scQsuuFqCrA with your preferred video ID.
-       Note: many browsers will block autoplay with sound until the user interacts. -->
+       Uses the track ID you provided: scQsuuFqCrA -->
   <div class="audio-shell" aria-hidden="true">
     <iframe
       id="bg-audio"
@@ -540,62 +503,41 @@
   <main class="shell">
     <section class="left">
       <header class="top-bar">
-        <span>VADIK / live feed</span>
+        <span>eristes</span>
         <span class="top-pill">
           <span class="top-dot"></span>
-          channel: active
+          audio available
         </span>
       </header>
 
-      <div>
-        <div class="brand">
-          <div class="brand-name">
-            <span>VADIK</span>
-          </div>
-          <div class="brand-caption">
-            soft glitch between cloud rap &amp; cold reality.
-          </div>
+      <div class="left-main">
+        <div class="left-title">
+          quiet motion
+        </div>
+        <div class="left-sub">
+          <span>
+            a page that doesn’t explain much, but still moves a little.
+          </span>
         </div>
 
-        <div class="poem">
-          tonight the <span class="accent">signal</span> is neon<br>
-          stray pixels humming under your eyelids<br>
-          somebody left a name in the static<br>
-          it flickers:<br>
-          <span class="accent">vadik</span>.
-        </div>
-
-        <div class="labels-row">
-          <span class="label">latency as lifestyle</span>
-          <span class="label">avant-garde softcore</span>
-          <span class="label">no fixed biography</span>
-        </div>
-      </div>
-
-      <div>
         <nav class="nav-row">
-          <!-- replace hrefs later with your real links -->
           <a class="nav-link" href="#">
-            <span class="key">[01]</span> fragments
-          </a>
-          <a class="nav-link" href="#">
-            <span class="key">[02]</span> sightings
-          </a>
-          <a class="nav-link" href="#">
-            <span class="key">[03]</span> no press kit
+            <span class="key">[01]</span> link
           </a>
           <a class="nav-link" href="https://youtube.com/watch?v=scQsuuFqCrA" target="_blank" rel="noopener">
-            <span class="key">[∞]</span> source track
+            <span class="key">[∞]</span> track
           </a>
         </nav>
       </div>
+
+      <div></div>
     </section>
 
     <section class="right">
       <div class="block">
         <div class="block-inner">
           <div class="block-header">
-            <span>SESSION COLLAGE</span>
+            <span>sound layer</span>
             <div class="block-dots">
               <span class="dot dot--pink"></span>
               <span class="dot dot--blue"></span>
@@ -605,30 +547,20 @@
 
           <div class="canvas">
             <div class="poster">
-              <div class="poster-tag">/ fever dream poster</div>
+              <div class="poster-tag">/ small scene</div>
               <div class="poster-main">
-                <span>glossy<br>lagoon<br>memory</span>
+                <span>still<br>image,<br>moving air.</span>
               </div>
               <div class="poster-caption">
-                an unfinished flyer for a show that never happened.
-                the door is still open, though.
+                nothing critical happens here. you can stay for a bit if you like.
               </div>
               <div class="poster-scribble"></div>
             </div>
 
             <div class="side-meta">
-              <div>
-                <div class="meta-line">
-                  <span class="meta-label">mood</span>
-                  <span class="meta-value">hydraulic tears / 140 bpm</span>
-                </div>
-                <div class="meta-line">
-                  <span class="meta-label">location</span>
-                  <span class="meta-value">buffering…</span>
-                </div>
-                <div class="meta-small">
-                  this node prefers to be misinterpreted first, understood later.
-                </div>
+              <div class="meta-small">
+                sound is optional.
+                the page works without it, but it’s a little different with it on.
               </div>
 
               <div class="audio-strip">
@@ -637,7 +569,7 @@
                   <span>play sound</span>
                 </button>
                 <span class="audio-status" id="audio-status">
-                  auto-play may be muted · tap to insist
+                  if it’s silent, your browser is being careful.
                 </span>
               </div>
             </div>
@@ -646,24 +578,23 @@
       </div>
 
       <footer class="footer">
-        <span>no biography available // by design</span>
-        <span>trace: VADIK&nbsp;·&nbsp;unverified build</span>
+        <span>minimal information</span>
+        <span>slow movement</span>
       </footer>
     </section>
   </main>
 
   <script>
-    // IMPORTANT:
     // Many browsers will block autoplay with sound.
     // The hidden iframe tries anyway.
-    // This button gives the user a clear way to "force" the sound.
+    // The button lets the user explicitly request sound.
     document.getElementById("play-audio").addEventListener("click", function () {
       const iframe = document.getElementById("bg-audio");
-      // Reloading the iframe src on click is a simple way to retrigger playback after user interaction
       const src = iframe.getAttribute("src");
+      // Retrigger playback after user interaction
       iframe.setAttribute("src", src);
       const status = document.getElementById("audio-status");
-      status.textContent = "sound requested // if still silent, your browser is strict.";
+      status.textContent = "sound requested. if nothing changes, the browser decided to stay silent.";
     });
   </script>
 </body>
