@@ -34,28 +34,39 @@
 
     body {
       font-family: "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at 10% 10%, rgba(248, 113, 113, 0.32), transparent 55%),
-        radial-gradient(circle at 80% 90%, rgba(56, 189, 248, 0.42), transparent 55%),
-        radial-gradient(circle at 0% 90%, rgba(94, 234, 212, 0.35), transparent 55%),
-        linear-gradient(135deg, var(--bg-0), var(--bg-1));
-      background-size: 200% 200%;
-      animation: bgShift 140s ease-in-out infinite alternate;
+      background: #020617;
       color: var(--fg-main);
       overflow: hidden;
       position: relative;
       isolation: isolate;
     }
 
+    /* animated gradient background layer */
+    .bg-gradient {
+      position: fixed;
+      inset: -20%;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(248, 113, 113, 0.32), transparent 55%),
+        radial-gradient(circle at 80% 90%, rgba(56, 189, 248, 0.42), transparent 55%),
+        radial-gradient(circle at 0% 90%, rgba(94, 234, 212, 0.35), transparent 55%),
+        linear-gradient(135deg, var(--bg-0), var(--bg-1));
+      background-size: 180% 180%;
+      animation: bgShift 80s ease-in-out infinite alternate;
+      z-index: -3;
+    }
+
     @keyframes bgShift {
       0% {
+        transform: translate3d(-4%, -6%, 0);
         background-position: 0% 0%;
       }
       50% {
-        background-position: 100% 60%;
+        transform: translate3d(4%, 2%, 0);
+        background-position: 80% 40%;
       }
       100% {
-        background-position: 0% 100%;
+        transform: translate3d(-3%, 4%, 0);
+        background-position: 20% 100%;
       }
     }
 
@@ -68,9 +79,15 @@
       opacity: 0.32;
       z-index: -1;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.9'/%3E%3C/svg%3E");
+      animation: grainDrift 40s linear infinite alternate;
     }
 
-    /* rotating halo disc */
+    @keyframes grainDrift {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(10px, -8px, 0); }
+    }
+
+    /* rotating halo disc (parallax via JS) */
     .halo {
       position: fixed;
       width: 520px;
@@ -83,6 +100,7 @@
       mix-blend-mode: screen;
       pointer-events: none;
       overflow: hidden;
+      animation: haloFloat 18s ease-in-out infinite alternate;
     }
 
     .halo::before {
@@ -108,6 +126,11 @@
       }
     }
 
+    @keyframes haloFloat {
+      0% { transform: translate(-50%, -50%) translate3d(0, -4px, 0); }
+      100% { transform: translate(-50%, -50%) translate3d(0, 4px, 0); }
+    }
+
     /* foggy single "vadik" */
     .fog-name {
       position: fixed;
@@ -123,6 +146,12 @@
       mix-blend-mode: soft-light;
       pointer-events: none;
       white-space: nowrap;
+      animation: fogFloat 26s ease-in-out infinite alternate;
+    }
+
+    @keyframes fogFloat {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-8px, 6px, 0); }
     }
 
     /* layout */
@@ -136,6 +165,12 @@
       max-width: 1120px;
       margin: 0 auto;
       z-index: 1;
+      animation: shellFloat 22s ease-in-out infinite alternate;
+    }
+
+    @keyframes shellFloat {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(0, -6px, 0); }
     }
 
     @media (max-width: 880px) {
@@ -214,8 +249,44 @@
       opacity: 0.8;
     }
 
+    /* contact line */
+    .contact-line {
+      margin-top: 2.2rem;
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.94rem;
+      line-height: 1.5;
+    }
+
+    .contact-line span {
+      text-transform: lowercase;
+      opacity: 0.9;
+    }
+
+    .contact-email {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.82rem;
+      padding: 0.15rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(248, 250, 252, 0.8);
+      background: rgba(15, 23, 42, 0.9);
+      text-decoration: none;
+      color: var(--fg-main);
+      letter-spacing: 0.06em;
+      transition: background 0.2s ease, transform 0.12s ease, box-shadow 0.15s ease;
+    }
+
+    .contact-email:hover {
+      background: rgba(248, 250, 252, 0.95);
+      color: #020617;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
+    }
+
     .nav-row {
-      margin-top: 3rem;
+      margin-top: 2.6rem;
       display: flex;
       flex-wrap: wrap;
       gap: 1.3rem;
@@ -265,6 +336,12 @@
       padding: 1.5rem 1.6rem 1.4rem;
       position: relative;
       overflow: hidden;
+      animation: blockFloat 26s ease-in-out infinite alternate;
+    }
+
+    @keyframes blockFloat {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(0, 6px, 0); }
     }
 
     .block::before {
@@ -338,6 +415,12 @@
       padding: 1rem 1rem 0.9rem;
       position: relative;
       overflow: hidden;
+      animation: posterDrift 30s ease-in-out infinite alternate;
+    }
+
+    @keyframes posterDrift {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(6px, -4px, 0); }
     }
 
     .poster-tag {
@@ -417,7 +500,7 @@
     .audio-button {
       border-radius: 999px;
       border: 1px solid rgba(248, 250, 252, 0.85);
-      padding: 0.85rem 2.6rem;
+      padding: 0.85rem 2.8rem;
       background: rgba(15, 23, 42, 0.96);
       color: var(--fg-main);
       cursor: pointer;
@@ -483,6 +566,7 @@
   </style>
 </head>
 <body>
+  <div class="bg-gradient"></div>
   <div class="noise"></div>
   <div class="halo"></div>
   <div class="fog-name">vadik</div>
@@ -516,8 +600,14 @@
         </div>
         <div class="left-sub">
           <span>
-            a page that doesn’t explain much, but still moves a little.
+            a page that doesn’t explain much, but everything moves a little.
           </span>
+        </div>
+
+        <div class="contact-line">
+          <span>message</span>
+          <a class="contact-email" href="mailto:vadim@schadnik.com">vadim@schadnik.com</a>
+          <span>me</span>
         </div>
 
         <nav class="nav-row">
@@ -552,7 +642,7 @@
                 <span>still<br>image,<br>moving air.</span>
               </div>
               <div class="poster-caption">
-                nothing critical happens here. you can stay for a bit if you like.
+                nothing urgent happens here. stay for a bit if you like.
               </div>
               <div class="poster-scribble"></div>
             </div>
@@ -560,7 +650,7 @@
             <div class="side-meta">
               <div class="meta-small">
                 sound is optional.
-                the page works without it, but it’s a little different with it on.
+                the page works without it, but it shifts a little with it on.
               </div>
 
               <div class="audio-strip">
@@ -578,24 +668,86 @@
       </div>
 
       <footer class="footer">
-        <span>minimal information</span>
-        <span>slow movement</span>
+        <span></span>
+        <span></span>
       </footer>
     </section>
   </main>
 
   <script>
-    // Many browsers will block autoplay with sound.
-    // The hidden iframe tries anyway.
-    // The button lets the user explicitly request sound.
-    document.getElementById("play-audio").addEventListener("click", function () {
-      const iframe = document.getElementById("bg-audio");
+    // Audio: browsers may block autoplay with sound.
+    // Hidden iframe tries anyway. Button lets user insist.
+    const audioBtn = document.getElementById("play-audio");
+    const audioStatus = document.getElementById("audio-status");
+    const iframe = document.getElementById("bg-audio");
+
+    audioBtn.addEventListener("click", function () {
       const src = iframe.getAttribute("src");
-      // Retrigger playback after user interaction
-      iframe.setAttribute("src", src);
-      const status = document.getElementById("audio-status");
-      status.textContent = "sound requested. if nothing changes, the browser decided to stay silent.";
+      iframe.setAttribute("src", src); // retrigger after interaction
+      audioStatus.textContent = "sound requested. if nothing changes, the browser decided to stay quiet.";
     });
+
+    // Subtle parallax for motion feeling
+    const halo = document.querySelector(".halo");
+    const fog = document.querySelector(".fog-name");
+    const poster = document.querySelector(".poster");
+    const block = document.querySelector(".block");
+    const shell = document.querySelector(".shell");
+
+    let targetX = 0, targetY = 0;
+    let currentX = 0, currentY = 0;
+
+    function handlePointerMove(e) {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const x = (e.clientX / w) * 2 - 1; // -1 to 1
+      const y = (e.clientY / h) * 2 - 1;
+      targetX = x;
+      targetY = y;
+    }
+
+    window.addEventListener("pointermove", handlePointerMove);
+
+    function lerp(a, b, n) {
+      return a + (b - a) * n;
+    }
+
+    function animate() {
+      currentX = lerp(currentX, targetX, 0.06);
+      currentY = lerp(currentY, targetY, 0.06);
+
+      const dx = currentX;
+      const dy = currentY;
+
+      if (halo) {
+        halo.style.transform =
+          `translate(-50%, -50%) translate3d(${dx * 16}px, ${dy * 10}px, 0)`;
+      }
+
+      if (fog) {
+        fog.style.transform =
+          `translate3d(${dx * -14}px, ${dy * 8}px, 0)`;
+      }
+
+      if (poster) {
+        poster.style.transform =
+          `translate3d(${dx * 6}px, ${dy * -4}px, 0)`;
+      }
+
+      if (block) {
+        block.style.transform =
+          `translate3d(${dx * -4}px, ${dy * 4}px, 0)`;
+      }
+
+      if (shell) {
+        shell.style.transform =
+          `translate3d(${dx * 4}px, ${dy * 2}px, 0)`;
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
   </script>
 </body>
 </html>
