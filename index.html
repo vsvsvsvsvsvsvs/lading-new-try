@@ -2,607 +2,669 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Vadik // Signal</title>
+  <title>VADIK :: overexposed / underdefined</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Futuristic fonts -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=JetBrains+Mono:wght@300;400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=DM+Serif+Display&family=JetBrains+Mono:wght@300;400;500&display=swap"
     rel="stylesheet">
 
   <style>
     :root {
-      --bg: #020617;
-      --bg-alt: #020617;
-      --accent: #38bdf8;
-      --accent-soft: rgba(56, 189, 248, 0.25);
-      --accent-2: #a855f7;
-      --text-main: #e5e7eb;
-      --text-dim: #6b7280;
-      --card-bg: rgba(15, 23, 42, 0.7);
-      --border-soft: rgba(148, 163, 184, 0.25);
-      --glow: 0 0 40px rgba(56, 189, 248, 0.45);
+      --bg-0: #05010a;
+      --bg-1: #0b0329;
+      --bg-2: #e11d48;
+      --bg-3: #22d3ee;
+      --fg-main: #f9fafb;
+      --fg-soft: #cbd5f5;
+      --fg-muted: #9ca3af;
+      --accent-1: #f97316;
+      --accent-2: #8b5cf6;
     }
 
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
 
     html, body {
       height: 100%;
       width: 100%;
-      background: radial-gradient(circle at top, #0b1120 0, #020617 45%, #000 100%);
-      color: var(--text-main);
-      font-family: "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      overflow-x: hidden;
     }
 
     body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
+      font-family: "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(248, 113, 113, 0.34), transparent 55%),
+        radial-gradient(circle at 80% 90%, rgba(56, 189, 248, 0.46), transparent 55%),
+        radial-gradient(circle at 0% 90%, rgba(94, 234, 212, 0.4), transparent 55%),
+        linear-gradient(135deg, var(--bg-0), var(--bg-1));
+      color: var(--fg-main);
+      overflow: hidden;
       position: relative;
       isolation: isolate;
     }
 
-    /* Background grid + noise  */
-    .grid-overlay {
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(15, 23, 42, 0.7) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(15, 23, 42, 0.7) 1px, transparent 1px);
-      background-size: 40px 40px;
-      opacity: 0.25;
-      pointer-events: none;
-      z-index: -2;
-    }
-
+    /* noisy overlay */
     .noise {
       position: fixed;
-      inset: -20px;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E");
+      inset: -10px;
+      pointer-events: none;
       mix-blend-mode: soft-light;
-      pointer-events: none;
+      opacity: 0.35;
       z-index: -1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.9'/%3E%3C/svg%3E");
     }
 
-    .orb {
+    /* rotating halo disc */
+    .halo {
       position: fixed;
-      border-radius: 999px;
-      filter: blur(50px);
-      opacity: 0.6;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      border: 1px solid rgba(248, 250, 252, 0.18);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: screen;
       pointer-events: none;
-      z-index: -1;
-    }
-
-    .orb--cyan {
-      width: 340px;
-      height: 340px;
-      background: radial-gradient(circle, rgba(56, 189, 248, 0.9), transparent 55%);
-      top: 8%;
-      left: 12%;
-      animation: float 18s ease-in-out infinite alternate;
-    }
-
-    .orb--violet {
-      width: 420px;
-      height: 420px;
-      background: radial-gradient(circle, rgba(168, 85, 247, 0.9), transparent 55%);
-      bottom: -4%;
-      right: -6%;
-      animation: float 26s ease-in-out infinite alternate-reverse;
-    }
-
-    @keyframes float {
-      0% { transform: translate3d(0, 0, 0); }
-      100% { transform: translate3d(40px, -40px, 0); }
-    }
-
-    /* Card */
-    .shell {
-      max-width: 980px;
-      width: 100%;
-    }
-
-    .card {
-      position: relative;
-      border-radius: 32px;
-      padding: 2.5rem clamp(2rem, 4vw, 3rem);
-      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.13), transparent 55%),
-                  radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.15), transparent 60%),
-                  linear-gradient(to bottom right, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.88));
-      border: 1px solid var(--border-soft);
-      box-shadow:
-        0 0 0 1px rgba(15, 23, 42, 1),
-        0 30px 80px rgba(15, 23, 42, 0.95),
-        var(--glow);
-      backdrop-filter: blur(26px);
-      display: grid;
-      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-      gap: 2.5rem;
       overflow: hidden;
     }
 
-    @media (max-width: 840px) {
-      .card {
-        grid-template-columns: minmax(0, 1fr);
-        padding: 2rem 1.6rem 2.3rem;
+    .halo::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        conic-gradient(from 180deg,
+          rgba(244, 114, 182, 0.0) 0deg,
+          rgba(244, 114, 182, 0.9) 90deg,
+          rgba(59, 130, 246, 0.0) 160deg,
+          rgba(34, 211, 238, 0.9) 230deg,
+          rgba(244, 114, 182, 0.0) 310deg,
+          rgba(59, 130, 246, 0.8) 360deg
+        );
+      animation: spin 32s linear infinite;
+      opacity: 0.75;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
       }
     }
 
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: 1px;
-      border-radius: inherit;
-      border: 1px solid rgba(148, 163, 184, 0.18);
-      mask: linear-gradient(to bottom right, transparent 0%, black 38%, black 65%, transparent 95%);
-      opacity: 0.7;
-      pointer-events: none;
+    /* layout */
+    .shell {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.4fr);
+      gap: 3rem;
+      padding: 2.25rem 3rem 2.5rem;
+      height: 100vh;
+      max-width: 1120px;
+      margin: 0 auto;
+      z-index: 1;
     }
 
-    .card__header {
+    @media (max-width: 880px) {
+      .shell {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 1.8rem 1.4rem 2.1rem;
+      }
+    }
+
+    .left {
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: space-between;
-      margin-bottom: 1.75rem;
+      min-height: 0;
+    }
+
+    .right {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.75rem;
+      min-height: 0;
+    }
+
+    /* header strip */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       font-family: "JetBrains Mono", monospace;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--text-dim);
+      color: var(--fg-muted);
     }
 
-    .badge-pill {
-      padding: 0.24rem 0.85rem;
+    .top-pill {
+      padding: 0.24rem 0.7rem;
       border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.45);
-      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.85));
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: rgba(15, 23, 42, 0.55);
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      color: #9ca3af;
+      gap: 0.35rem;
     }
 
-    .badge-dot {
+    .top-dot {
       width: 7px;
       height: 7px;
       border-radius: 999px;
       background: #22c55e;
-      box-shadow: 0 0 10px rgba(34, 197, 94, 0.8);
+      box-shadow: 0 0 9px rgba(34, 197, 94, 0.9);
     }
 
-    .divider {
-      height: 1px;
-      width: 100%;
-      background: radial-gradient(circle, rgba(148, 163, 184, 0.5), transparent 70%);
-      opacity: 0.6;
-      margin-bottom: 1.5rem;
-    }
-
-    /* Left side: main identity */
-    .left {
-      display: flex;
-      flex-direction: column;
-      gap: 1.75rem;
+    /* main wordmark */
+    .brand {
+      margin-top: 2.2rem;
       position: relative;
-      z-index: 1;
     }
 
-    .tagline {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: var(--text-dim);
-    }
-
-    .name-glitch {
-      position: relative;
-      display: inline-flex;
-      flex-direction: column;
-      gap: 0.1rem;
-    }
-
-    .name-glitch-main {
-      font-size: clamp(2.6rem, 5vw, 3.5rem);
-      font-weight: 500;
+    .brand-name {
+      font-family: "DM Serif Display", "Times New Roman", serif;
+      font-size: clamp(3rem, 6vw, 4.4rem);
       letter-spacing: 0.24em;
       text-transform: uppercase;
-      text-shadow:
-        0 0 18px rgba(15, 23, 42, 0.9),
-        0 0 60px rgba(56, 189, 248, 0.6);
-    }
-
-    .name-glitch-main span {
+      line-height: 0.9;
       position: relative;
       display: inline-block;
     }
 
-    .name-glitch-main span::before,
-    .name-glitch-main span::after {
-      content: attr(data-text);
+    .brand-name::before {
+      content: "VADIK";
       position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0.5;
-      pointer-events: none;
+      inset: 0;
+      transform: translate(-3px, 4px);
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(244, 114, 182, 0.9);
+      text-stroke: 1px rgba(244, 114, 182, 0.9);
+      opacity: 0.7;
       mix-blend-mode: screen;
     }
 
-    .name-glitch-main span::before {
-      transform: translate3d(-2px, -1px, 0);
-      color: var(--accent);
-      clip-path: polygon(0 0, 100% 0, 100% 40%, 0 45%);
-      animation: glitch1 4s infinite ease-in-out alternate;
+    .brand-name span {
+      background: linear-gradient(110deg, #f9fafb, #f472b6, #22d3ee);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow:
+        0 0 28px rgba(15, 23, 42, 0.9),
+        0 0 60px rgba(244, 114, 182, 0.85);
     }
 
-    .name-glitch-main span::after {
-      transform: translate3d(2px, 1px, 0);
-      color: var(--accent-2);
-      clip-path: polygon(0 60%, 100% 55%, 100% 100%, 0 100%);
-      animation: glitch2 3.6s infinite ease-in-out alternate;
-    }
-
-    @keyframes glitch1 {
-      0% { transform: translate3d(-2px, -1px, 0); }
-      20% { transform: translate3d(-3px, 0, 0); }
-      40% { transform: translate3d(-1px, 1px, 0); }
-      60% { transform: translate3d(-4px, -1px, 0); }
-      80% { transform: translate3d(-2px, 1px, 0); }
-      100% { transform: translate3d(-3px, 0, 0); }
-    }
-
-    @keyframes glitch2 {
-      0% { transform: translate3d(2px, 1px, 0); }
-      20% { transform: translate3d(3px, 0, 0); }
-      40% { transform: translate3d(1px, -1px, 0); }
-      60% { transform: translate3d(4px, 1px, 0); }
-      80% { transform: translate3d(2px, -1px, 0); }
-      100% { transform: translate3d(3px, 0, 0); }
-    }
-
-    .name-sub {
-      font-size: 0.82rem;
-      letter-spacing: 0.22em;
+    .brand-caption {
+      margin-top: 0.8rem;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.76rem;
       text-transform: uppercase;
-      color: var(--text-dim);
+      letter-spacing: 0.2em;
+      color: var(--fg-muted);
+      max-width: 16rem;
     }
 
-    .whisper {
-      font-size: 0.9rem;
-      max-width: 420px;
-      line-height: 1.6;
-      color: #9ca3af;
+    /* poetic block */
+    .poem {
+      margin-top: 2.4rem;
+      font-size: 0.98rem;
+      max-width: 30rem;
+      line-height: 1.7;
+      color: var(--fg-soft);
     }
 
-    .whisper strong {
-      color: var(--accent);
-      font-weight: 400;
+    .poem span.accent {
+      color: #f472b6;
     }
 
-    .chips {
+    .labels-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.55rem;
-      margin-top: 0.6rem;
+      gap: 0.5rem;
+      margin-top: 1.4rem;
     }
 
-    .chip {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      padding: 0.28rem 0.7rem;
+    .label {
       border-radius: 999px;
-      border: 1px dashed rgba(148, 163, 184, 0.5);
-      color: #9ca3af;
-      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.95));
-    }
-
-    .link-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.9rem;
-      margin-top: 0.2rem;
-    }
-
-    .ghost-link {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.8rem;
+      padding: 0.26rem 0.75rem;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.7);
+      font-size: 0.76rem;
       text-transform: uppercase;
       letter-spacing: 0.14em;
-      color: var(--accent);
-      text-decoration: none;
-      padding-bottom: 0.12rem;
-      overflow: hidden;
+      color: var(--fg-muted);
     }
 
-    .ghost-link span {
+    /* bottom left: small nav */
+    .nav-row {
+      margin-top: 2.6rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.3rem;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .nav-link {
       position: relative;
+      color: var(--fg-soft);
+      text-decoration: none;
+      padding-bottom: 0.18rem;
+      opacity: 0.82;
     }
 
-    .ghost-link::after {
+    .nav-link::after {
       content: "";
       position: absolute;
       left: 0;
       bottom: 0;
       width: 0%;
       height: 1px;
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      background: linear-gradient(90deg, #f97316, #f472b6, #22d3ee);
       transition: width 0.32s ease-out;
     }
 
-    .ghost-link:hover::after {
+    .nav-link:hover::after {
       width: 100%;
     }
 
-    .ghost-link-code {
-      font-size: 0.9rem;
-      opacity: 0.85;
+    .nav-link span.key {
+      opacity: 0.5;
+      margin-right: 0.4rem;
     }
 
-    /* Right side: terminal-ish mysterious info */
-    .right {
+    /* right side: collage + “terminal” + audio */
+    .block {
+      border-radius: 24px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background:
+        linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.65));
+      box-shadow:
+        0 0 0 1px rgba(15, 23, 42, 1),
+        0 30px 80px rgba(15, 23, 42, 0.9);
+      padding: 1.3rem 1.3rem 1.15rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .block::before {
+      content: "";
+      position: absolute;
+      inset: -60%;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(248, 113, 113, 0.15), transparent 65%),
+        radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.2), transparent 70%);
+      opacity: 0.9;
+      mix-blend-mode: soft-light;
+      pointer-events: none;
+    }
+
+    .block-inner {
       position: relative;
       z-index: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.78rem;
-      color: #9ca3af;
     }
 
-    .panel {
-      border-radius: 22px;
-      padding: 1.1rem 1.1rem 1rem;
-      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.98));
-      border: 1px solid rgba(31, 41, 55, 0.9);
-      box-shadow: 0 14px 40px rgba(15, 23, 42, 0.9);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .panel-header {
+    .block-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--fg-muted);
       margin-bottom: 0.6rem;
     }
 
-    .panel-dots {
+    .block-dots {
       display: inline-flex;
-      gap: 0.3rem;
+      gap: 0.22rem;
     }
 
     .dot {
       width: 8px;
       height: 8px;
       border-radius: 999px;
-      background: #4b5563;
+      background: #6b7280;
     }
 
-    .dot--red { background: #f97373; }
-    .dot--yellow { background: #facc15; }
-    .dot--green { background: #4ade80; }
+    .dot--pink { background: #fb7185; }
+    .dot--blue { background: #38bdf8; }
+    .dot--lime { background: #a3e635; }
 
-    .panel-title {
-      font-size: 0.7rem;
+    .canvas {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 0.6rem;
+      margin-top: 0.4rem;
+      align-items: stretch;
+    }
+
+    @media (max-width: 880px) {
+      .canvas {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .poster {
+      border-radius: 18px;
+      border: 1px solid rgba(248, 250, 252, 0.1);
+      background:
+        linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.7)),
+        conic-gradient(from 210deg, rgba(248, 250, 252, 0.3), transparent, rgba(244, 114, 182, 0.5), transparent);
+      padding: 1.1rem 1rem 0.9rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .poster-tag {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+      margin-bottom: 0.8rem;
+    }
+
+    .poster-main {
+      font-family: "DM Serif Display", serif;
+      font-size: 1.6rem;
+      line-height: 1.1;
+      max-width: 11rem;
+    }
+
+    .poster-main span {
+      background: linear-gradient(130deg, #f97316, #f472b6, #a855f7, #22c55e);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .poster-scribble {
+      position: absolute;
+      right: -8%;
+      bottom: -16%;
+      width: 58%;
+      aspect-ratio: 4 / 3;
+      border-radius: 36% 64% 56% 44%;
+      background:
+        radial-gradient(circle at 30% 10%, rgba(248, 250, 252, 0.9), transparent 55%),
+        radial-gradient(circle at 70% 80%, rgba(244, 114, 182, 0.9), transparent 62%);
+      mix-blend-mode: screen;
+      opacity: 0.8;
+      filter: blur(1px);
+      transform: rotate(-10deg);
+    }
+
+    .poster-caption {
+      margin-top: 1.1rem;
+      font-size: 0.76rem;
+      color: rgba(209, 213, 219, 0.9);
+      max-width: 14rem;
+    }
+
+    .side-meta {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.8rem;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--fg-soft);
+    }
+
+    .meta-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.16em;
-      color: #6b7280;
-    }
-
-    .code {
-      line-height: 1.55;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .code .accent {
-      color: var(--accent);
-    }
-
-    .code .faint {
-      color: #4b5563;
-    }
-
-    .scanline {
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        to bottom,
-        rgba(15, 23, 42, 0.6) 0,
-        rgba(15, 23, 42, 0.6) 2px,
-        rgba(15, 23, 42, 0.9) 2px,
-        rgba(15, 23, 42, 0.9) 4px
-      );
-      mix-blend-mode: soft-light;
-      opacity: 0.45;
-      pointer-events: none;
-      animation: scan 9s linear infinite;
-    }
-
-    @keyframes scan {
-      0% { transform: translateY(-20%); opacity: 0.15; }
-      40% { opacity: 0.4; }
-      100% { transform: translateY(20%); opacity: 0.1; }
-    }
-
-    .meta-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.75rem;
-      margin-top: 0.6rem;
     }
 
     .meta-label {
-      font-size: 0.68rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #6b7280;
-      margin-bottom: 0.18rem;
+      opacity: 0.6;
     }
 
     .meta-value {
-      font-size: 0.8rem;
-      color: #e5e7eb;
-      opacity: 0.9;
+      opacity: 0.95;
     }
 
-    .meta-value--muted {
-      color: #9ca3af;
-      font-size: 0.76rem;
-    }
-
-    .footer {
-      margin-top: 0.8rem;
-      font-family: "JetBrains Mono", monospace;
+    .meta-small {
+      margin-top: 0.5rem;
       font-size: 0.7rem;
+      color: var(--fg-muted);
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: #4b5563;
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      flex-wrap: wrap;
     }
 
-    .footer span {
+    /* audio controls */
+    .audio-strip {
+      margin-top: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.9rem;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.74rem;
+      color: var(--fg-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .audio-button {
+      border-radius: 999px;
+      border: 1px solid rgba(248, 250, 252, 0.6);
+      padding: 0.42rem 1.1rem;
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--fg-main);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: transform 0.09s ease-out, box-shadow 0.09s ease-out, background 0.2s ease;
+      box-shadow: 0 0 0 rgba(248, 250, 252, 0);
+    }
+
+    .audio-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
+      background: linear-gradient(120deg, rgba(248, 250, 252, 0.9), rgba(248, 250, 252, 0.8));
+      color: #020617;
+    }
+
+    .audio-status {
       opacity: 0.8;
     }
 
-    .footer span strong {
-      color: var(--accent);
-      font-weight: 400;
+    .audio-icon {
+      font-size: 0.9rem;
+    }
+
+    /* bottom right: footer text */
+    .footer {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      color: var(--fg-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      display: flex;
+      justify-content: space-between;
+      gap: 0.8rem;
+      margin-top: 0.6rem;
+    }
+
+    .footer span:nth-child(2) {
+      text-align: right;
+    }
+
+    /* hidden YouTube iframe: audio only */
+    .audio-shell {
+      position: fixed;
+      width: 1px;
+      height: 1px;
+      bottom: 0;
+      left: 0;
+      opacity: 0;
+      pointer-events: none;
+      z-index: -1;
     }
   </style>
 </head>
 <body>
-  <div class="grid-overlay"></div>
   <div class="noise"></div>
-  <div class="orb orb--cyan"></div>
-  <div class="orb orb--violet"></div>
+  <div class="halo"></div>
+
+  <!-- Hidden audio-only YouTube player
+       Replace scQsuuFqCrA with your preferred video ID.
+       Note: many browsers will block autoplay with sound until the user interacts. -->
+  <div class="audio-shell" aria-hidden="true">
+    <iframe
+      id="bg-audio"
+      src="https://www.youtube.com/embed/scQsuuFqCrA?autoplay=1&controls=0&loop=1&playlist=scQsuuFqCrA"
+      title="Background audio"
+      frameborder="0"
+      allow="autoplay; encrypted-media"
+      allowfullscreen>
+    </iframe>
+  </div>
 
   <main class="shell">
-    <section class="card" aria-label="Vadik cryptic landing page">
-      <header class="card__header">
-        <div>NODE&nbsp;:&nbsp;VADIK // LOCAL</div>
-        <div class="badge-pill">
-          <span class="badge-dot"></span>
-          ONLINE · SIGNAL STABLE
-        </div>
+    <section class="left">
+      <header class="top-bar">
+        <span>VADIK / live feed</span>
+        <span class="top-pill">
+          <span class="top-dot"></span>
+          channel: active
+        </span>
       </header>
 
-      <div class="divider"></div>
-
-      <!-- LEFT SIDE -->
-      <div class="left">
-        <p class="tagline">/ identity&nbsp;&nbsp;&nbsp; // fragment</p>
-
-        <div class="name-glitch">
-          <div class="name-glitch-main" aria-label="Vadik">
-            <span data-text="VADIK">VADIK</span>
+      <div>
+        <div class="brand">
+          <div class="brand-name">
+            <span>VADIK</span>
           </div>
-          <div class="name-sub">
-            UNKNOWN SOURCE · LOW VISIBILITY
+          <div class="brand-caption">
+            soft glitch between cloud rap &amp; cold reality.
           </div>
         </div>
 
-        <p class="whisper">
-          Somewhere between <strong>signal</strong> and <strong>noise</strong> there is a trace.
-          It spells a name you were never meant to read: <strong>Vadik</strong>.
-        </p>
-
-        <div class="chips">
-          <span class="chip">latent process</span>
-          <span class="chip">silent observer</span>
-          <span class="chip">encrypted presence</span>
-          <span class="chip">/dev/echo</span>
+        <div class="poem">
+          tonight the <span class="accent">signal</span> is neon<br>
+          stray pixels humming under your eyelids<br>
+          somebody left a name in the static<br>
+          it flickers:<br>
+          <span class="accent">vadik</span>.
         </div>
 
-        <div class="link-row">
-          <!-- Replace href with your real links later -->
-          <a href="#" class="ghost-link">
-            <span>open&nbsp;signal</span>
-            <span class="ghost-link-code">[ 01 ]</span>
-          </a>
-          <a href="#" class="ghost-link">
-            <span>quiet&nbsp;channel</span>
-            <span class="ghost-link-code">[ 02 ]</span>
-          </a>
-          <a href="#" class="ghost-link">
-            <span>no&nbsp;public&nbsp;profile</span>
-            <span class="ghost-link-code">[ ∅ ]</span>
-          </a>
+        <div class="labels-row">
+          <span class="label">latency as lifestyle</span>
+          <span class="label">avant-garde softcore</span>
+          <span class="label">no fixed biography</span>
         </div>
       </div>
 
-      <!-- RIGHT SIDE -->
-      <aside class="right" aria-label="Mysterious metadata">
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-dots">
-              <span class="dot dot--red"></span>
-              <span class="dot dot--yellow"></span>
-              <span class="dot dot--green"></span>
+      <div>
+        <nav class="nav-row">
+          <!-- replace hrefs later with your real links -->
+          <a class="nav-link" href="#">
+            <span class="key">[01]</span> fragments
+          </a>
+          <a class="nav-link" href="#">
+            <span class="key">[02]</span> sightings
+          </a>
+          <a class="nav-link" href="#">
+            <span class="key">[03]</span> no press kit
+          </a>
+          <a class="nav-link" href="https://youtube.com/watch?v=scQsuuFqCrA" target="_blank" rel="noopener">
+            <span class="key">[∞]</span> source track
+          </a>
+        </nav>
+      </div>
+    </section>
+
+    <section class="right">
+      <div class="block">
+        <div class="block-inner">
+          <div class="block-header">
+            <span>SESSION COLLAGE</span>
+            <div class="block-dots">
+              <span class="dot dot--pink"></span>
+              <span class="dot dot--blue"></span>
+              <span class="dot dot--lime"></span>
             </div>
-            <div class="panel-title">/ trace.log</div>
           </div>
 
-          <div class="code">
-<span class="faint">[00:00:00]</span> boot sequence initiated
-<span class="faint">[00:00:01]</span> search(&nbsp;<span class="accent">"VADIK"</span>&nbsp;) → <span class="accent">1</span> unstable match
-<span class="faint">[00:00:03]</span> identity hash: <span class="accent">0x9f.a3.21.∴</span>
-<span class="faint">[00:00:04]</span> visibility: <span class="accent">below threshold</span>
-<span class="faint">[00:00:06]</span> status: <span class="accent">observing // not broadcasting</span>
-<span class="faint">[00:00:09]</span> note: if you found this node, you were looking too closely.
-          </div>
+          <div class="canvas">
+            <div class="poster">
+              <div class="poster-tag">/ fever dream poster</div>
+              <div class="poster-main">
+                <span>glossy<br>lagoon<br>memory</span>
+              </div>
+              <div class="poster-caption">
+                an unfinished flyer for a show that never happened.
+                the door is still open, though.
+              </div>
+              <div class="poster-scribble"></div>
+            </div>
 
-          <div class="scanline"></div>
+            <div class="side-meta">
+              <div>
+                <div class="meta-line">
+                  <span class="meta-label">mood</span>
+                  <span class="meta-value">hydraulic tears / 140 bpm</span>
+                </div>
+                <div class="meta-line">
+                  <span class="meta-label">location</span>
+                  <span class="meta-value">buffering…</span>
+                </div>
+                <div class="meta-small">
+                  this node prefers to be misinterpreted first, understood later.
+                </div>
+              </div>
+
+              <div class="audio-strip">
+                <button class="audio-button" id="play-audio">
+                  <span class="audio-icon">▶</span>
+                  <span>play sound</span>
+                </button>
+                <span class="audio-status" id="audio-status">
+                  auto-play may be muted · tap to insist
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">/ node.meta</div>
-          </div>
-
-          <div class="meta-grid">
-            <div>
-              <div class="meta-label">handle</div>
-              <div class="meta-value">"Vadik"</div>
-            </div>
-            <div>
-              <div class="meta-label">signal type</div>
-              <div class="meta-value meta-value--muted">asynchronous · low frequency</div>
-            </div>
-            <div>
-              <div class="meta-label">surface</div>
-              <div class="meta-value meta-value--muted">minimal · encrypted · unfinished</div>
-            </div>
-            <div>
-              <div class="meta-label">access level</div>
-              <div class="meta-value">read-only / invite-only</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="footer">
-          <span>// handshake not required</span>
-          <span>trace id: <strong>vadik-∞</strong></span>
-        </div>
-      </aside>
+      <footer class="footer">
+        <span>no biography available // by design</span>
+        <span>trace: VADIK&nbsp;·&nbsp;unverified build</span>
+      </footer>
     </section>
   </main>
+
+  <script>
+    // IMPORTANT:
+    // Many browsers will block autoplay with sound.
+    // The hidden iframe tries anyway.
+    // This button gives the user a clear way to "force" the sound.
+    document.getElementById("play-audio").addEventListener("click", function () {
+      const iframe = document.getElementById("bg-audio");
+      // Reloading the iframe src on click is a simple way to retrigger playback after user interaction
+      const src = iframe.getAttribute("src");
+      iframe.setAttribute("src", src);
+      const status = document.getElementById("audio-status");
+      status.textContent = "sound requested // if still silent, your browser is strict.";
+    });
+  </script>
 </body>
 </html>
