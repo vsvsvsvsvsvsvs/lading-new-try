@@ -44,29 +44,29 @@
     /* animated gradient background layer */
     .bg-gradient {
       position: fixed;
-      inset: -20%;
+      inset: -30%;
       background:
-        radial-gradient(circle at 10% 10%, rgba(248, 113, 113, 0.32), transparent 55%),
-        radial-gradient(circle at 80% 90%, rgba(56, 189, 248, 0.42), transparent 55%),
-        radial-gradient(circle at 0% 90%, rgba(94, 234, 212, 0.35), transparent 55%),
+        radial-gradient(circle at 10% 10%, rgba(248, 113, 113, 0.40), transparent 55%),
+        radial-gradient(circle at 80% 90%, rgba(56, 189, 248, 0.48), transparent 55%),
+        radial-gradient(circle at 0% 90%, rgba(94, 234, 212, 0.38), transparent 55%),
         linear-gradient(135deg, var(--bg-0), var(--bg-1));
-      background-size: 180% 180%;
-      animation: bgShift 80s ease-in-out infinite alternate;
-      z-index: -3;
+      background-size: 200% 200%;
+      animation: bgShift 55s ease-in-out infinite alternate;
+      z-index: -4;
     }
 
     @keyframes bgShift {
       0% {
-        transform: translate3d(-4%, -6%, 0);
+        transform: translate3d(-8%, -6%, 0);
         background-position: 0% 0%;
       }
       50% {
-        transform: translate3d(4%, 2%, 0);
-        background-position: 80% 40%;
+        transform: translate3d(8%, 4%, 0);
+        background-position: 85% 40%;
       }
       100% {
-        transform: translate3d(-3%, 4%, 0);
-        background-position: 20% 100%;
+        transform: translate3d(-6%, 8%, 0);
+        background-position: 10% 100%;
       }
     }
 
@@ -77,7 +77,7 @@
       pointer-events: none;
       mix-blend-mode: soft-light;
       opacity: 0.32;
-      z-index: -1;
+      z-index: -2;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.9'/%3E%3C/svg%3E");
       animation: grainDrift 40s linear infinite alternate;
     }
@@ -85,6 +85,65 @@
     @keyframes grainDrift {
       0% { transform: translate3d(0, 0, 0); }
       100% { transform: translate3d(10px, -8px, 0); }
+    }
+
+    /* decorative orbs (background blobs that also parallax) */
+    .orb {
+      position: fixed;
+      border-radius: 999px;
+      filter: blur(40px);
+      opacity: 0.8;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      z-index: -3;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+    }
+
+    .orb--pink {
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(244, 114, 182, 0.9), transparent 60%);
+      top: 6%;
+      left: 8%;
+      animation-name: orbPinkFloat;
+      animation-duration: 38s;
+    }
+
+    @keyframes orbPinkFloat {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(28px, 20px, 0); }
+    }
+
+    .orb--cyan {
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.9), transparent 60%);
+      bottom: -4%;
+      right: -2%;
+      animation-name: orbCyanFloat;
+      animation-duration: 46s;
+    }
+
+    @keyframes orbCyanFloat {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-24px, -18px, 0); }
+    }
+
+    .orb--amber {
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(251, 191, 36, 0.75), transparent 60%);
+      top: 60%;
+      left: 18%;
+      animation-name: orbAmberFloat;
+      animation-duration: 52s;
+    }
+
+    @keyframes orbAmberFloat {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(18px, -24px, 0); }
     }
 
     /* rotating halo disc (parallax via JS) */
@@ -96,11 +155,10 @@
       border: 1px solid rgba(248, 250, 252, 0.16);
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
       mix-blend-mode: screen;
       pointer-events: none;
       overflow: hidden;
-      animation: haloFloat 18s ease-in-out infinite alternate;
+      z-index: -1;
     }
 
     .halo::before {
@@ -126,11 +184,6 @@
       }
     }
 
-    @keyframes haloFloat {
-      0% { transform: translate(-50%, -50%) translate3d(0, -4px, 0); }
-      100% { transform: translate(-50%, -50%) translate3d(0, 4px, 0); }
-    }
-
     /* foggy single "vadik" */
     .fog-name {
       position: fixed;
@@ -147,6 +200,7 @@
       pointer-events: none;
       white-space: nowrap;
       animation: fogFloat 26s ease-in-out infinite alternate;
+      z-index: -1;
     }
 
     @keyframes fogFloat {
@@ -165,12 +219,6 @@
       max-width: 1120px;
       margin: 0 auto;
       z-index: 1;
-      animation: shellFloat 22s ease-in-out infinite alternate;
-    }
-
-    @keyframes shellFloat {
-      0% { transform: translate3d(0, 0, 0); }
-      100% { transform: translate3d(0, -6px, 0); }
     }
 
     @media (max-width: 880px) {
@@ -336,12 +384,6 @@
       padding: 1.5rem 1.6rem 1.4rem;
       position: relative;
       overflow: hidden;
-      animation: blockFloat 26s ease-in-out infinite alternate;
-    }
-
-    @keyframes blockFloat {
-      0% { transform: translate3d(0, 0, 0); }
-      100% { transform: translate3d(0, 6px, 0); }
     }
 
     .block::before {
@@ -415,12 +457,6 @@
       padding: 1rem 1rem 0.9rem;
       position: relative;
       overflow: hidden;
-      animation: posterDrift 30s ease-in-out infinite alternate;
-    }
-
-    @keyframes posterDrift {
-      0% { transform: translate3d(0, 0, 0); }
-      100% { transform: translate3d(6px, -4px, 0); }
     }
 
     .poster-tag {
@@ -566,13 +602,18 @@
   </style>
 </head>
 <body>
-  <div class="bg-gradient"></div>
+  <div class="bg-gradient parallax" data-depth="-6"></div>
   <div class="noise"></div>
-  <div class="halo"></div>
-  <div class="fog-name">vadik</div>
 
-  <!-- Hidden audio-only YouTube player
-       Uses the track ID you provided: scQsuuFqCrA -->
+  <!-- background shapes -->
+  <div class="orb orb--pink parallax" data-depth="-14"></div>
+  <div class="orb orb--cyan parallax" data-depth="-10"></div>
+  <div class="orb orb--amber parallax" data-depth="-8"></div>
+
+  <div class="halo parallax" data-depth="20" data-base="translate(-50%, -50%)"></div>
+  <div class="fog-name parallax" data-depth="-4">vadik</div>
+
+  <!-- Hidden audio-only YouTube player (track id: scQsuuFqCrA) -->
   <div class="audio-shell" aria-hidden="true">
     <iframe
       id="bg-audio"
@@ -584,7 +625,7 @@
     </iframe>
   </div>
 
-  <main class="shell">
+  <main class="shell parallax" data-depth="4">
     <section class="left">
       <header class="top-bar">
         <span>eristes</span>
@@ -624,7 +665,7 @@
     </section>
 
     <section class="right">
-      <div class="block">
+      <div class="block parallax" data-depth="-6">
         <div class="block-inner">
           <div class="block-header">
             <span>sound layer</span>
@@ -636,7 +677,7 @@
           </div>
 
           <div class="canvas">
-            <div class="poster">
+            <div class="poster parallax" data-depth="8">
               <div class="poster-tag">/ small scene</div>
               <div class="poster-main">
                 <span>still<br>image,<br>moving air.</span>
@@ -647,7 +688,7 @@
               <div class="poster-scribble"></div>
             </div>
 
-            <div class="side-meta">
+            <div class="side-meta parallax" data-depth="-3">
               <div class="meta-small">
                 sound is optional.
                 the page works without it, but it shifts a little with it on.
@@ -667,7 +708,7 @@
         </div>
       </div>
 
-      <footer class="footer">
+      <footer class="footer parallax" data-depth="-2">
         <span></span>
         <span></span>
       </footer>
@@ -676,7 +717,6 @@
 
   <script>
     // Audio: browsers may block autoplay with sound.
-    // Hidden iframe tries anyway. Button lets user insist.
     const audioBtn = document.getElementById("play-audio");
     const audioStatus = document.getElementById("audio-status");
     const iframe = document.getElementById("bg-audio");
@@ -687,19 +727,14 @@
       audioStatus.textContent = "sound requested. if nothing changes, the browser decided to stay quiet.";
     });
 
-    // Subtle parallax for motion feeling
-    const halo = document.querySelector(".halo");
-    const fog = document.querySelector(".fog-name");
-    const poster = document.querySelector(".poster");
-    const block = document.querySelector(".block");
-    const shell = document.querySelector(".shell");
-
+    // Parallax for many elements
+    const parallaxEls = document.querySelectorAll(".parallax");
     let targetX = 0, targetY = 0;
     let currentX = 0, currentY = 0;
 
     function handlePointerMove(e) {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
+      const w = window.innerWidth || 1;
+      const h = window.innerHeight || 1;
       const x = (e.clientX / w) * 2 - 1; // -1 to 1
       const y = (e.clientY / h) * 2 - 1;
       targetX = x;
@@ -719,30 +754,13 @@
       const dx = currentX;
       const dy = currentY;
 
-      if (halo) {
-        halo.style.transform =
-          `translate(-50%, -50%) translate3d(${dx * 16}px, ${dy * 10}px, 0)`;
-      }
-
-      if (fog) {
-        fog.style.transform =
-          `translate3d(${dx * -14}px, ${dy * 8}px, 0)`;
-      }
-
-      if (poster) {
-        poster.style.transform =
-          `translate3d(${dx * 6}px, ${dy * -4}px, 0)`;
-      }
-
-      if (block) {
-        block.style.transform =
-          `translate3d(${dx * -4}px, ${dy * 4}px, 0)`;
-      }
-
-      if (shell) {
-        shell.style.transform =
-          `translate3d(${dx * 4}px, ${dy * 2}px, 0)`;
-      }
+      parallaxEls.forEach(el => {
+        const depth = parseFloat(el.dataset.depth || "0");
+        const base = el.dataset.base || "";
+        const moveX = dx * depth;
+        const moveY = dy * depth * 0.7;
+        el.style.transform = `${base} translate3d(${moveX}px, ${moveY}px, 0)`;
+      });
 
       requestAnimationFrame(animate);
     }
